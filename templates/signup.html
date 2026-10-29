@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — Student Assistant AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body class="auth-body">
+
+<div class="auth-page">
+
+  <div class="auth-brand">
+    <svg class="auth-brand__logo" width="36" height="36" viewBox="0 0 32 32" fill="none">
+      <rect width="32" height="32" rx="7" fill="#EAA700"/>
+      <path d="M16 7L27 13v6L16 25 5 19v-6L16 7Z" stroke="#3A0F34" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+      <circle cx="16" cy="16" r="3.5" fill="#3A0F34"/>
+    </svg>
+    <span class="auth-brand__name">Student Assistant AI</span>
+  </div>
+
+  <div class="auth-card">
+    <h1 class="auth-card__heading">Create Your Account</h1>
+    <p class="auth-card__sub">Your personal AI study companion starts here.</p>
+
+    {% if errors.general %}
+    <div class="auth-alert" role="alert">
+      <svg width="15" height="15" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M10 6v5M10 13v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      {{ errors.general }}
+    </div>
+    {% endif %}
+
+    <form class="auth-form" method="POST" action="{{ url_for('signup') }}" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+
+      <!-- Full name -->
+      <div class="auth-field {% if errors.name %}auth-field--error{% endif %}">
+        <label class="auth-label" for="name">Full name</label>
+        <input
+          class="auth-input"
+          type="text"
+          id="name"
+          name="name"
+          value="{{ vals.get('name', '') }}"
+          placeholder="Your full name"
+          autocomplete="name"
+          required
+          aria-required="true"
+          aria-describedby="{% if errors.name %}err-name{% endif %}"
+        />
+        {% if errors.name %}
+        <span class="auth-field-err" id="err-name" role="alert">{{ errors.name }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Email -->
+      <div class="auth-field {% if errors.email %}auth-field--error{% endif %}">
+        <label class="auth-label" for="email">Email address</label>
+        <input
+          class="auth-input"
+          type="email"
+          id="email"
+          name="email"
+          value="{{ vals.get('email', '') }}"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+          aria-required="true"
+          aria-describedby="{% if errors.email %}err-email{% endif %}"
+        />
+        {% if errors.email %}
+        <span class="auth-field-err" id="err-email" role="alert">{{ errors.email }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Password -->
+      <div class="auth-field {% if errors.password %}auth-field--error{% endif %}">
+        <label class="auth-label" for="password">Password</label>
+        <div class="auth-input-wrap">
+          <input
+            class="auth-input"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Min 8 chars, letter &amp; number"
+            autocomplete="new-password"
+            required
+            aria-required="true"
+            aria-describedby="pw-req {% if errors.password %}err-pw{% endif %}"
+          />
+          <button type="button" class="auth-eye" aria-label="Show password" data-target="password">
+            <svg class="eye-show" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="eye-hide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" hidden>
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        {% if errors.password %}
+        <span class="auth-field-err" id="err-pw" role="alert">{{ errors.password }}</span>
+        {% endif %}
+        <div class="pw-strength" id="pw-req" aria-live="polite">
+          <span class="pw-req" id="req-len">8+ characters</span>
+          <span class="pw-req" id="req-letter">letter</span>
+          <span class="pw-req" id="req-num">number</span>
+        </div>
+      </div>
+
+      <!-- Confirm password -->
+      <div class="auth-field {% if errors.confirm %}auth-field--error{% endif %}">
+        <label class="auth-label" for="confirm">Confirm password</label>
+        <div class="auth-input-wrap">
+          <input
+            class="auth-input"
+            type="password"
+            id="confirm"
+            name="confirm"
+            placeholder="Repeat your password"
+            autocomplete="new-password"
+            required
+            aria-required="true"
+            aria-describedby="{% if errors.confirm %}err-confirm{% endif %}"
+          />
+          <button type="button" class="auth-eye" aria-label="Show password" data-target="confirm">
+            <svg class="eye-show" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg class="eye-hide" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" hidden>
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        {% if errors.confirm %}
+        <span class="auth-field-err" id="err-confirm" role="alert">{{ errors.confirm }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Terms -->
+      <div class="auth-field {% if errors.terms %}auth-field--error{% endif %}">
+        <label class="auth-check">
+          <input type="checkbox" name="terms" value="1" {% if vals.get('terms') %}checked{% endif %}/>
+          <span class="auth-check__box" aria-hidden="true"></span>
+          <span>I agree to the <span class="auth-link">Terms of Service</span> and <span class="auth-link">Privacy Policy</span></span>
+        </label>
+        {% if errors.terms %}
+        <span class="auth-field-err" role="alert">{{ errors.terms }}</span>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="auth-btn" id="signupBtn">
+        <span class="auth-btn__text">Create Account</span>
+        <span class="auth-btn__spinner" hidden aria-hidden="true"></span>
+      </button>
+    </form>
+
+    <p class="auth-footer-text">
+      Already have an account?
+      <a class="auth-link" href="{{ url_for('login') }}">Sign in</a>
+    </p>
+  </div>
+
+  <p class="auth-tagline">Learn Smarter. Study Better. Achieve More.</p>
+</div>
+
+<script>
+(function(){
+  // Password strength indicators
+  var pwInput = document.getElementById("password");
+  var reqLen    = document.getElementById("req-len");
+  var reqLetter = document.getElementById("req-letter");
+  var reqNum    = document.getElementById("req-num");
+
+  function checkPw(v){
+    toggle(reqLen,    v.length >= 8);
+    toggle(reqLetter, /[A-Za-z]/.test(v));
+    toggle(reqNum,    /\d/.test(v));
+  }
+  function toggle(el, ok){
+    el.classList.toggle("pw-req--ok", ok);
+    el.classList.toggle("pw-req--bad", !ok && el.closest(".auth-form").dataset.touched);
+  }
+  pwInput.addEventListener("input", function(){ checkPw(pwInput.value); });
+  pwInput.addEventListener("blur",  function(){
+    pwInput.closest(".auth-form").dataset.touched = "1";
+    checkPw(pwInput.value);
+  });
+
+  // Show/hide password toggles
+  document.querySelectorAll(".auth-eye").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var inp  = document.getElementById(btn.dataset.target);
+      var show = inp.type === "password";
+      inp.type = show ? "text" : "password";
+      btn.querySelector(".eye-show").hidden = show;
+      btn.querySelector(".eye-hide").hidden = !show;
+      btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    });
+  });
+
+  // Prevent double-submit
+  document.querySelector(".auth-form").addEventListener("submit", function(){
+    var btn = document.getElementById("signupBtn");
+    btn.disabled = true;
+    btn.querySelector(".auth-btn__text").hidden = true;
+    btn.querySelector(".auth-btn__spinner").hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
